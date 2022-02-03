@@ -64,12 +64,11 @@ export class BoardsDropDown extends React.Component<BoardsDropDown.Props> {
       >
         {items
           .map(({ name, port, selected, onClick }) => ({
-            label: nls.localize(
-              'arduino/board/boardListItem',
-              '{0} at {1}',
-              name,
-              Port.toString(port)
-            ),
+            boardName: name,
+            address: port.address,
+            addressLabel: port.addressLabel,
+            protocol: port.protocol,
+            protocolLabel: port.protocolLabel,
             selected,
             onClick,
           }))
@@ -86,22 +85,42 @@ export class BoardsDropDown extends React.Component<BoardsDropDown.Props> {
   }
 
   protected renderItem({
-    label,
+    boardName,
+    address,
+    addressLabel,
+    protocol,
+    protocolLabel,
     selected,
     onClick,
   }: {
-    label: string;
+    boardName: string;
+    address: string;
+    addressLabel: string;
+    protocol: string;
+    protocolLabel: string;
     selected?: boolean;
     onClick: () => void;
   }): React.ReactNode {
+    const protocolIcon =
+      new Map<string, string>([
+        ['serial', 'fa fa-usb'],
+        ['network', 'fa fa-network'],
+        ['bluetooth', 'fa fa-bluetooth'],
+      ]).get(protocol) || 'fa fa-cube';
+
     return (
       <div
-        key={label}
+        key={boardName + address + protocol}
         className={`arduino-boards-dropdown-item ${selected ? 'selected' : ''}`}
         onClick={onClick}
       >
-        <div>{label}</div>
-        {selected ? <span className="fa fa-check" /> : ''}
+        <span className={`protocol-icon ${protocolIcon}`} />
+        <div className="board-info">
+          <p className="board-name">{boardName}</p>
+          <p className="address-protocol">
+            {addressLabel} {protocolLabel}
+          </p>
+        </div>
       </div>
     );
   }
