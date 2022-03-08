@@ -306,6 +306,7 @@ export class SketchesServiceImpl extends CoreClientAware
     const config = await this.configService.getConfiguration();
     const sketchbookPath = FileUri.fsPath(config.sketchDirUri);
     let sketchName: string | undefined;
+    const tempSketchNames = await this.getAllTempSketchNames();
 
     // If it's another day, reset the count of sketches created today
     if (this.lastSketchBaseName !== sketchBaseName) this.sketchSuffixIndex = 1;
@@ -316,7 +317,7 @@ export class SketchesServiceImpl extends CoreClientAware
         this.sketchSuffixIndex++
       )}`;
       // Note: we check the future destination folder (`directories.user`) for name collision and not the temp folder!
-      const sketchExists = await promisify(fs.exists)(
+      const sketchExists = tempSketchNames.includes(sketchNameCandidate) || await promisify(fs.exists)(
         path.join(sketchbookPath, sketchNameCandidate)
       );
       if (!sketchExists) {
@@ -348,6 +349,24 @@ void loop() {
       { encoding: 'utf8' }
     );
     return this.loadSketch(FileUri.create(sketchDir).toString());
+  }
+
+  private async getAllTempSketchNames(): Promise<string[]> {
+    const temp = await promisify(fs.realpath)(os.tmpdir());
+    const sketchFolders = await promisify(fs.readdir)(temp, {
+        withFileTypes: true
+    });
+    const names: string[] = [];
+    for (const entry of sketchFolders) {
+        if (entry.isDirectory() && entry.name.startsWith(prefix)) {
+            const fullName = path.join(temp, entry.name);
+            const subFolders = await promisify(fs.readdir)(fullName, {
+                withFileTypes: true
+            });
+            names.push(...subFolders.filter(e => e.isDirectory()).map(e => e.name));
+        }
+    }
+    return names;
   }
 
   async getSketchFolder(uri: string): Promise<Sketch | undefined> {
