@@ -1,6 +1,6 @@
 import '../../src/browser/style/index.css';
 import { ContainerModule } from 'inversify';
-import { WidgetFactory } from '@theia/core/lib/browser/widget-manager';
+import { WidgetFactory, WidgetManager as TheiaWidgetManager } from '@theia/core/lib/browser/widget-manager';
 import { CommandContribution } from '@theia/core/lib/common/command';
 import { bindViewContribution } from '@theia/core/lib/browser/shell/view-contribution';
 import {
@@ -275,6 +275,7 @@ import {
   IDEUpdaterDialogWidget,
 } from './dialogs/ide-updater/ide-updater-dialog';
 import { ElectronIpcConnectionProvider } from '@theia/core/lib/electron-browser/messaging/electron-ipc-connection-provider';
+import { WidgetManager } from './theia/core/widget-manager';
 
 const ElementQueries = require('css-element-queries/src/ElementQueries');
 
@@ -455,6 +456,9 @@ export default new ContainerModule((bind, unbind, isBound, rebind) => {
     .inSingletonScope();
   rebind(TheiaEditorPreviewContribution)
     .to(EditorPreviewContribution)
+    .inSingletonScope();
+  rebind(TheiaWidgetManager)
+    .to(WidgetManager)
     .inSingletonScope();
   rebind(TheiaMonacoStatusBarContribution)
     .to(MonacoStatusBarContribution)
