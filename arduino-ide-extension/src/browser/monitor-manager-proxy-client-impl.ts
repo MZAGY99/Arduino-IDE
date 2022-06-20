@@ -147,7 +147,13 @@ export class MonitorManagerProxyClientImpl
                 this.lastConnectedBoard?.selectedBoard?.fqbn ||
               selectedPort?.id !== this.lastConnectedBoard?.selectedPort?.id
             ) {
-              this.onMonitorShouldResetEmitter.fire(null);
+              const changedDuringUpload = await this.server().getIsUploadInProgressForBoard(
+                this.lastConnectedBoard?.selectedBoard,
+                this.lastConnectedBoard?.selectedPort
+              )
+              if (!changedDuringUpload) {
+                this.onMonitorShouldResetEmitter.fire(null);
+              }
               this.lastConnectedBoard = {
                 selectedBoard: selectedBoard,
                 selectedPort: selectedPort,

@@ -95,4 +95,11 @@ export class MonitorManagerProxyImpl implements MonitorManagerProxy {
     }
     this.client = client;
   }
+
+  async getIsUploadInProgressForBoard(board?: Board, port?: Port): Promise<boolean> {
+    if (!board || !port) {
+      return false
+    }
+    return this.manager.isUploadInProgressForBoard(board, port)
+  }
 }

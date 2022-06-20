@@ -70,6 +70,12 @@ export class MonitorManager extends CoreClientAware {
     return this.monitorIDsByUploadState.uploadInProgress.length > 0;
   }
 
+  // for checks from frontend
+  isUploadInProgressForBoard(board: Board, port: Port): boolean {
+    const monitorID = this.monitorID(board, port)
+    return this.monitorIDIsInUploadState('uploadInProgress', monitorID)
+  }
+
   addToMonitorIDsByUploadState(state: UploadState, monitorID: string): void {
     this.monitorIDsByUploadState[state].push(monitorID);
   }

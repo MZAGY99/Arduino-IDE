@@ -24,6 +24,7 @@ export interface MonitorManagerProxy
   ): Promise<void>;
   stopMonitor(board: Board, port: Port): Promise<void>;
   getCurrentSettings(board: Board, port: Port): Promise<MonitorSettings>;
+  getIsUploadInProgressForBoard(board?: Board, port?: Port): Promise<boolean>
 }
 
 export const MonitorManagerProxyClient = Symbol('MonitorManagerProxyClient');
