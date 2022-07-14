@@ -2,7 +2,7 @@ import { MaybePromise } from '@theia/core';
 import { inject, injectable } from '@theia/core/shared/inversify';
 import * as monaco from '@theia/monaco-editor-core';
 import { Formatter } from '../../common/protocol/formatter';
-import { InoSelector } from '../ino-selectors';
+import { InoSelector } from '../selectors';
 import { fullRange } from '../utils/monaco';
 import { Contribution, URI } from './contribution';
 
