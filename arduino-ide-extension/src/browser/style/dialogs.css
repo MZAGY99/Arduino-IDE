@@ -18,16 +18,15 @@
     background-color: transparent;
     font-size: var(--theia-ui-font-size2);
     color: var(--theia-list-inactiveSelectionForeground);
-    min-height: 0;
 }
 
 .p-Widget.dialogOverlay .dialogBlock .dialogControl {
-    padding: 0 0 36px;
-    min-height: 0;
+    padding: 28px 0 36px;
 }
 
 .p-Widget.dialogOverlay .dialogBlock .dialogContent {
     padding: 0;
+    overflow: auto;
 }
 
 .p-Widget.dialogOverlay .dialogBlock .dialogContent > input {
