@@ -10,6 +10,7 @@
     "node": ">=14.0.0 <15"
   },
   "devDependencies": {
+    "@lottiefiles/lottie-player": "^1.5.7",
     "@theia/cli": "1.25.0",
     "@types/sinon": "^2.3.5",
     "@types/jsdom": "^11.0.4",
@@ -22,6 +23,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unused-imports": "^1.1.1",
+    "html-webpack-plugin": "^5.5.0",
     "husky": "^6.0.0",
     "ignore-styles": "^5.0.1",
     "lerna": "^3.20.2",
@@ -29,6 +31,7 @@
     "node-gyp": "^9.0.0",
     "prettier": "^2.3.1",
     "reflect-metadata": "^0.1.10",
+    "remove-files-webpack-plugin": "^1.5.0",
     "rimraf": "^2.6.1",
     "semver": "^7.3.2",
     "typescript": "~4.5.5",
@@ -40,7 +43,8 @@
     "@types/react": "16.14.25"
   },
   "scripts": {
-    "prepare": "lerna run prepare && yarn download:plugins",
+    "prepare": "yarn preload:generate && lerna run prepare && yarn download:plugins",
+    "preload:generate": "webpack --config ./preload/webpack.config.js",
     "cleanup": "npx rimraf ./**/node_modules && rm -rf ./node_modules ./.browser_modules ./arduino-ide-extension/build ./arduino-ide-extension/downloads ./arduino-ide-extension/Examples ./arduino-ide-extension/lib ./browser-app/lib ./browser-app/src-gen ./browser-app/gen-webpack.config.js ./electron-app/lib ./electron-app/src-gen ./electron-app/gen-webpack.config.js",
     "rebuild:browser": "theia rebuild:browser",
     "rebuild:electron": "theia rebuild:electron",

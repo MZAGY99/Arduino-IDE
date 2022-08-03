@@ -23,3 +23,5 @@ scripts/themes/tokens
 .env
 # content trace files for electron
 electron-app/traces
+# The IDE2 preload file is generated on the fly
+electron-app/resources/preload.html
