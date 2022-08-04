@@ -68,15 +68,18 @@ export class SaveAsSketch extends SketchContribution {
       return false;
     }
 
+    // If the sketch is temp, IDE2 proposes the default sketchbook folder URI.
+    // Otherwise, it proposes the parent folder of the current sketch.
+    const containerDirUri = isTemp
+      ? new URI((await this.configService.getConfiguration()).sketchDirUri)
+      : new URI(sketch.uri).parent;
+    const exists = await this.fileService.exists(
+      containerDirUri.resolve(sketch.name)
+    );
+
     // If target does not exist, propose a `directories.user`/${sketch.name} path
     // If target exists, propose `directories.user`/${sketch.name}_copy_${yyyymmddHHMMss}
-    const sketchDirUri = new URI(
-      (await this.configService.getConfiguration()).sketchDirUri
-    );
-    const exists = await this.fileService.exists(
-      sketchDirUri.resolve(sketch.name)
-    );
-    const defaultUri = sketchDirUri.resolve(
+    const defaultUri = containerDirUri.resolve(
       exists
         ? `${sketch.name}_copy_${dateFormat(new Date(), 'yyyymmddHHMMss')}`
         : sketch.name
