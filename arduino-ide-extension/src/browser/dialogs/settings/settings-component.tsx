@@ -505,6 +505,7 @@ export class SettingsComponent extends React.Component<
       canSelectFiles: false,
       canSelectMany: false,
       canSelectFolders: true,
+      modal: true,
     });
     if (uri) {
       const sketchbookPath = await this.props.fileService.fsPath(uri);

@@ -18,15 +18,14 @@ import { CurrentSketch } from '../../common/protocol/sketches-service-client-imp
 
 @injectable()
 export class SaveAsSketch extends SketchContribution {
-
   @inject(ApplicationShell)
-  protected readonly applicationShell: ApplicationShell;
+  private readonly applicationShell: ApplicationShell;
 
   @inject(EditorManager)
   protected override readonly editorManager: EditorManager;
 
   @inject(WindowService)
-  protected readonly windowService: WindowService;
+  private readonly windowService: WindowService;
 
   override registerCommands(registry: CommandRegistry): void {
     registry.registerCommand(SaveAsSketch.Commands.SAVE_AS_SKETCH, {
@@ -52,7 +51,7 @@ export class SaveAsSketch extends SketchContribution {
   /**
    * Resolves `true` if the sketch was successfully saved as something.
    */
-  async saveAs(
+  private async saveAs(
     {
       execOnlyIfTemp,
       openAfterMove,
@@ -83,13 +82,16 @@ export class SaveAsSketch extends SketchContribution {
         : sketch.name
     );
     const defaultPath = await this.fileService.fsPath(defaultUri);
-    const { filePath, canceled } = await remote.dialog.showSaveDialog({
-      title: nls.localize(
-        'arduino/sketch/saveFolderAs',
-        'Save sketch folder as...'
-      ),
-      defaultPath,
-    });
+    const { filePath, canceled } = await remote.dialog.showSaveDialog(
+      remote.getCurrentWindow(),
+      {
+        title: nls.localize(
+          'arduino/sketch/saveFolderAs',
+          'Save sketch folder as...'
+        ),
+        defaultPath,
+      }
+    );
     if (!filePath || canceled) {
       return false;
     }
