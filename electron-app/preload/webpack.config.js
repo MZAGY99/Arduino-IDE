@@ -1,8 +1,10 @@
 const path = require('path');
 const RemoveWebpackPlugin = require('remove-files-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
   mode: 'production',
+  target: 'electron-renderer',
   devtool: 'inline-source-map',
   entry: path.join(__dirname, 'index.js'),
   output: {
@@ -11,9 +13,6 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js'],
-  },
-  module: {
-    rules: [{ test: /\.css$/, use: ['style-loader', 'css-loader'] }],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -58,26 +57,24 @@ module.exports = {
         }
 
         .spinner-container {
-            display: flex;
-            flex-direction: center;
-            align-self: center;
-            justify-content: center;
-            height: 100vh;
-            width: 100vw;
+          display: flex;
+          flex-direction: center;
+          align-self: center;
+          justify-content: center;
         }
 
-        .custom-spinner {
+        #custom-spinner {
             align-self: center;
+            height: 320px;
+            width: 320px;
         }
+
     </style>
 </head>
 
 <body>
-    <div class='spinner-container'>
-        <div class='custom-spinner'>
-            <lottie-player autoplay loop mode="normal" style="width:320px;height:320px">
-            </lottie-player>
-        </div>
+    <div class="spinner-container">
+        <div id="custom-spinner"/>
     </div>
     ${htmlWebpackPlugin.files.js.map(
       (jsFile) => `<script>
@@ -90,7 +87,7 @@ module.exports = {
 
 </html>
 `,
-      filename: path.join(__dirname, '../electron-app/resources/preload.html'),
+      filename: path.join(__dirname, '../resources/preload.html'),
     }),
     new RemoveWebpackPlugin({
       after: {

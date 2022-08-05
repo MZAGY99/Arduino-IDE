@@ -87,13 +87,6 @@
     cp('-rf', path(rootPath, filename), path('..', workingCopy));
   }
 
-  //---------------------------------------------------------------------------------------------+
-  // Copy the patched `index.js` for the frontend, the Theia preload, etc. from `./electron-app` |
-  //---------------------------------------------------------------------------------------------+
-  for (const filename of foldersToSyncFromDev) {
-    cp('-rf', path(rootPath, 'electron-app', filename), path('..', 'build'));
-  }
-
   //----------------------------------------------+
   // Sanity check: all versions must be the same. |
   //----------------------------------------------+
@@ -145,6 +138,13 @@
     `yarn --network-timeout 1000000 --cwd ${path('..', workingCopy)}`,
     `Building the ${productName} application`
   );
+
+  //---------------------------------------------------------------------------------------------+
+  // Copy the patched `index.js` for the frontend, the Theia preload, etc. from `./electron-app` |
+  //---------------------------------------------------------------------------------------------+
+  for (const filename of foldersToSyncFromDev) {
+    cp('-rf', path(workingCopy, 'electron-app', filename), path('..', 'build'));
+  }
 
   //-------------------------------------------------------------------------------------------------------------------------+
   // Test the application. With this approach, we cannot publish test results to GH Actions but save 6-10 minutes per builds |
